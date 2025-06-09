@@ -1,5 +1,5 @@
 'use client';
-import { Grid, Typography, Box } from '@mui/material';
+import { Grid, Typography, Box, Container } from '@mui/material';
 import ProductCard from '@/components/shared/ProductCard';
 
 const products = [
@@ -25,19 +25,48 @@ const products = [
 
 export default function FeaturedProducts() {
   return (
-  
-    <Box>
-      <Typography variant="h5" fontWeight={700} mb={2}>
-        Featured Products
-      </Typography>
-      
-      <Grid container spacing={4}>
-        {products.map((product) => (
-          <Grid item xs={12} sm={6} md={4} key={product.id}>
-            <ProductCard {...product} />
-          </Grid>
-        ))}
-      </Grid>
-    </Box>
+    <Container maxWidth="xl">
+      <Box sx={{ 
+        py: 6,
+        px: { xs: 2, md: 4 }
+      }}>
+        <Box sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          mb: 4
+        }}>
+          <Typography
+            variant="h5"
+            sx={{
+              fontWeight: 600,
+              color: 'text.primary'
+            }}
+          >
+            Featured Products
+          </Typography>
+          {/* 如果需要"View All"，取消注释下面一行 */}
+          <Typography 
+            variant="body2"
+            sx={{ 
+              color: 'primary.main',
+              cursor: 'pointer',
+              '&:hover': {
+                textDecoration: 'underline'
+              }
+            }}
+          >
+            View All
+          </Typography>
+        </Box>
+        <Grid container spacing={3}>
+          {products.map((product) => (
+            <Grid item xs={12} sm={6} md={3} key={product.id}>
+              <ProductCard {...product} />
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
+    </Container>
   );
 }
