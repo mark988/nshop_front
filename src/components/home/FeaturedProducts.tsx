@@ -1,17 +1,39 @@
 'use client';
-import { Box, Typography, Grid } from '@mui/material';
-import ProductCard from '../shared/ProductCard';
-import { images } from '@/config/images';
+import { Grid, Typography, Box } from '@mui/material';
+import ProductCard from '@/components/shared/ProductCard';
+
+const products = [
+  {
+    id: 1,
+    name: 'Product A',
+    price: 99,
+    image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=400&q=100'
+  },
+  {
+    id: 2,
+    name: 'Product B',
+    price: 199,
+    image: 'https://images.unsplash.com/photo-1617806118233-18e1de247200?auto=format&fit=scale&w=800&q=100'
+  },
+  {
+    id: 3,
+    name: 'Product C',
+    price: 299,
+    image: 'https://images.unsplash.com/photo-1580480055273-228ff5388ef8?auto=format&fit=crop&w=400&q=100'
+  }
+];
 
 export default function FeaturedProducts() {
   return (
-    <Box sx={{ py: 8, px: 4 }}>
-      <Typography variant="h2" sx={{ mb: 4 }}>
+  
+    <Box>
+      <Typography variant="h5" fontWeight={700} mb={2}>
         Featured Products
       </Typography>
+      
       <Grid container spacing={4}>
-        {images.products.featured.map((product) => (
-          <Grid item xs={12} md={4} key={product.id}>
+        {products.map((product) => (
+          <Grid item xs={12} sm={6} md={4} key={product.id}>
             <ProductCard {...product} />
           </Grid>
         ))}
