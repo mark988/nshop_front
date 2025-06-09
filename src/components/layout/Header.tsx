@@ -34,7 +34,7 @@ export default function Header() {
   };
 
   return (
-    <AppBar position="sticky" color="default" elevation={1}>
+    <AppBar position="sticky" color="inherit" elevation={0}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           {/* Logo for desktop */}
@@ -49,6 +49,10 @@ export default function Header() {
               fontWeight: 700,
               color: 'primary.main',
               textDecoration: 'none',
+              borderBottom: '1px solid',
+              borderColor: (theme) => theme.palette.grey[200], // 比背景色略深
+              boxShadow: 'none', // 明确去除阴影
+              backgroundColor: (theme) => theme.palette.background.paper
             }}
           >
             NShop

@@ -7,7 +7,7 @@ import CategorySection from '@/components/home/CategorySection';
 
 export default function Home() {
   return (
-    <Box>
+    <Box sx={{ marginTop: '2rem' }}>
       <HeroBanner />
       <FeaturedProducts />
       <NewArrivals />

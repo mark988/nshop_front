@@ -15,12 +15,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      <body>
         <MaterialUIProvider>
           <Header />
-          <main style={{ flex: 1 }}>
-            {children}
-          </main>
+          {/* 只包main内容，头部和footer不变 */}
+          <div className="app-content-container">
+            <main>
+              {children}
+            </main>
+          </div>
           <Footer />
         </MaterialUIProvider>
       </body>

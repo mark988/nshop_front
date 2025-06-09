@@ -41,7 +41,7 @@ export default function ProductCard({
         flexDirection: 'column',
         transition: 'all 0.3s ease',
         bgcolor: 'background.paper',
-        borderRadius: 2,
+        borderRadius: 1,
         border: '1px solid',
         borderColor: 'divider',
         '&:hover': {

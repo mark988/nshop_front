@@ -18,6 +18,9 @@ export default function HeroBanner() {
         background: `linear-gradient(rgba(47, 79, 79, 0.8), rgba(47, 79, 79, 0.8)), url(${currentSlide.path})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
+        borderRadius: 2,         // 8px圆角
+        overflow: 'hidden',      // 保证内容也有圆角
+        width: '100%',
       }}
     >
       <Typography variant="h1" sx={{ mb: 2 }}>
