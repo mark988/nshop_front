@@ -1,0 +1,5 @@
+# 清除 Next.js 缓存
+rm -rf .next
+
+# 重新启动开发服务器
+npm run dev
