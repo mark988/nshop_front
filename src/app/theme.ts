@@ -67,6 +67,8 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: '12px',
+          boxShadow: 'none', // 去掉所有卡片的阴影
+          border: 'none',    // 去掉所有卡片的边框线
         },
       },
     },
@@ -74,7 +76,7 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           '&:last-child': {
-            paddingBottom: '16px', // 全局修改
+            paddingBottom: '16px', // 全局设置最后一个 CardContent 的 padding-bottom
           },
         },
       },
