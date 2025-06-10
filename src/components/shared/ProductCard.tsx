@@ -235,22 +235,33 @@ export default function ProductCard({
             sx={{ color: 'primary.main' }}
           />
         </Box>
-        <Typography
-          variant="subtitle1"
-          sx={{
-            fontWeight: 500,
-            mb: 1,
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            display: '-webkit-box',
-            WebkitLineClamp: 2,
-            WebkitBoxOrient: 'vertical',
-            lineHeight: 1.2,
-            height: '2.4em'
-          }}
+        {/* 商品名称可点击跳转详情 */}
+        <Link 
+          href={`/product/${id}`} 
+          style={{ textDecoration: 'none' }}
         >
-          {name}
-        </Typography>
+          <Typography
+            variant="subtitle1"
+            sx={{
+              fontWeight: 500,
+              mb: 1,
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              display: '-webkit-box',
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: 'vertical',
+              lineHeight: 1.2,
+              height: '2.4em',
+              color: 'text.primary',
+              cursor: 'pointer',
+              '&:hover': {
+                color: 'primary.main'
+              }
+            }}
+          >
+            {name}
+          </Typography>
+        </Link>
         {/* 价格行 */}
         <Box
           sx={{
