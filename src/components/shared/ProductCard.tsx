@@ -51,8 +51,8 @@ export default function ProductCard({
         transition: 'all 0.3s ease',
         bgcolor: 'background.paper',
         borderRadius: 1,
-        border: '1px solid',
-        borderColor: 'divider',
+        // border: '1px solid',
+        // borderColor: 'divider',
         '&:hover': {
           transform: 'scale(1.02)',
           boxShadow: '0 8px 16px rgba(0,0,0,0.1)',
