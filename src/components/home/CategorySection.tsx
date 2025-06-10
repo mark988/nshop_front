@@ -4,21 +4,48 @@ import { images } from '@/config/images';
 
 export default function CategorySection() {
   return (
-    <Box sx={{ py: 8, px: 4 }}>
-      <Typography variant="h5" sx={{ mb: 4 }}>
-        Shop by Category
-      </Typography>
-      <Grid container spacing={4}>
+    <Box sx={{ py: 6 }}>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          mb: 4,
+        }}
+      >
+        <Typography
+          variant="h5"
+          sx={{
+            fontWeight: 600,
+            color: 'text.primary',
+          }}
+        >
+          Shop by Category
+        </Typography>
+        <Typography
+          variant="body2"
+          sx={{
+            color: 'primary.main',
+            cursor: 'pointer',
+            '&:hover': {
+              textDecoration: 'underline',
+            },
+          }}
+        >
+          View All
+        </Typography>
+      </Box>
+      <Grid container spacing={3}>
         {images.categories.map((category) => (
           <Grid item xs={12} sm={6} md={3} key={category.id}>
-            <Card 
-              sx={{ 
+            <Card
+              sx={{
                 height: '100%',
                 cursor: 'pointer',
                 transition: 'transform 0.2s',
                 '&:hover': {
                   transform: 'scale(1.02)',
-                }
+                },
               }}
             >
               <CardMedia
