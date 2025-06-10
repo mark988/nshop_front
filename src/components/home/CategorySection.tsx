@@ -5,7 +5,7 @@ import { images } from '@/config/images';
 export default function CategorySection() {
   return (
     <Box sx={{ py: 8, px: 4 }}>
-      <Typography variant="h2" sx={{ mb: 4 }}>
+      <Typography variant="h5" sx={{ mb: 4 }}>
         Shop by Category
       </Typography>
       <Grid container spacing={4}>
