@@ -19,8 +19,9 @@ import Image from 'next/image';
 
 interface ProductCardProps {
   id: number;
-  image?: string;
-  video?: string;
+  image?: string; // 商品主图
+  video?: string; // 商品视频
+  videoPoster?: string; // 视频首帧封面
   type?: 'image' | 'video';
   name: string;
   price: number;
@@ -33,6 +34,7 @@ export default function ProductCard({
   id,
   image,
   video,
+  videoPoster,
   type = 'image',
   name,
   price,
@@ -42,10 +44,17 @@ export default function ProductCard({
 }: ProductCardProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [favorited, setFavorited] = useState(false);
+  const [videoPlaying, setVideoPlaying] = useState(false);
 
   const handleFavorite = () => {
     setFavorited((prev) => !prev);
     // 可加入收藏接口调用
+  };
+
+  // 视频点击后播放
+  const handleVideoClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e.preventDefault(); // 阻止跳转
+    setVideoPlaying(true);
   };
 
   return (
@@ -100,6 +109,7 @@ export default function ProductCard({
               }}
             />
           )}
+          {/* 图片模式 */}
           {type === 'image' && image && (
             <Image
               src={image}
@@ -114,25 +124,80 @@ export default function ProductCard({
               onLoadingComplete={() => setIsLoading(false)}
             />
           )}
+          {/* 视频模式 - 首帧封面和点击播放 */}
           {type === 'video' && video && (
-            <video
-              src={video}
-              autoPlay
-              muted
-              loop
-              preload="metadata"
-              //controls   视频控件整个工具栏都隐藏
-              controlsList="nodownload"
-              style={{
+            <Box
+              sx={{
                 width: '100%',
                 height: '100%',
-                objectFit: 'cover',
-                borderRadius: '8px 8px 0 0',
-                background: '#eee'
+                position: 'relative',
+                cursor: videoPlaying ? 'default' : 'pointer'
               }}
-              poster=""
-              onLoadedData={() => setIsLoading(false)}
-            />
+              onClick={!videoPlaying ? handleVideoClick : undefined}
+            >
+              {/* 首帧封面 */}
+              {!videoPlaying && (
+                <>
+                  <Image
+                    src={
+                      videoPoster ||
+                      image ||
+                      '/default-poster.jpg'
+                    }
+                    alt={name}
+                    fill
+                    style={{
+                      objectFit: 'cover',
+                      borderRadius: '8px 8px 0 0',
+                      display: 'block'
+                    }}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                  />
+                  {/* 播放按钮 */}
+                  <Box sx={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: 48,
+                    height: 48,
+                    bgcolor: 'rgba(0,0,0,0.48)',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    zIndex: 2
+                  }}>
+                    <svg width="32" height="32" viewBox="0 0 48 48" fill="white">
+                      <polygon points="16,12 40,24 16,36" />
+                    </svg>
+                  </Box>
+                </>
+              )}
+              {/* 播放视频 */}
+              {videoPlaying && (
+                <video
+                  src={video}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="metadata"
+                  controls={false}
+                  controlsList="nodownload"
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    borderRadius: '8px 8px 0 0',
+                    background: '#eee',
+                    display: 'block'
+                  }}
+                  poster={videoPoster || image || '/default-poster.jpg'}
+                  onLoadedData={() => setIsLoading(false)}
+                />
+              )}
+            </Box>
           )}
         </Link>
         <IconButton
@@ -254,3 +319,17 @@ export default function ProductCard({
     </Card>
   );
 }
+
+// 测试用例示例
+// <ProductCard
+//   id={2}
+//   name="Product B"
+//   video="/videos/product-b.mp4"
+//   videoPoster="https://plus.unsplash.com/premium_photo-1690971631383-326a8b5d8ed7"
+//   image="/images/product-b.jpg"
+//   type="video"
+//   price={199}
+//   memberPrice={159}
+//   description="This is product B with video."
+//   rating={5}
+// />

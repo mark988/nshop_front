@@ -16,7 +16,9 @@ const products = [
     name: 'Product B',
     price: 199,
     memberPrice: 159,
+    videoPoster: "https://plus.unsplash.com/premium_photo-1690971631383-326a8b5d8ed7",
     video: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/big_buck_bunny_1080p.mp4',
+    image: "https://plus.unsplash.com/premium_photo-1690971631383-326a8b5d8ed7", 
     type: 'video'
   },
   {
