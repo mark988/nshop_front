@@ -5,7 +5,7 @@ import { images } from '@/config/images';
 
 export default function NewArrivals() {
   return (
-    <Box sx={{ py: 6 }}>
+    <Box sx={{ py: 3 }}>
       <Box sx={{ 
         display: 'flex', 
         justifyContent: 'space-between',

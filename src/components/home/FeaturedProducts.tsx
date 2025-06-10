@@ -35,7 +35,7 @@ const products = [
 
 export default function FeaturedProducts() {
   return (
-    <Box sx={{ py: 6 }}>
+    <Box sx={{ py: 3 }}>
       <Box sx={{
         display: 'flex',
         justifyContent: 'space-between',

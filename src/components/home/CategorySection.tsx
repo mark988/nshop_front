@@ -4,7 +4,7 @@ import { images } from '@/config/images';
 
 export default function CategorySection() {
   return (
-    <Box sx={{ py: 6 }}>
+    <Box sx={{ py: 3 }}>
       <Box
         sx={{
           display: 'flex',
@@ -43,6 +43,8 @@ export default function CategorySection() {
                 height: '100%',
                 cursor: 'pointer',
                 transition: 'transform 0.2s',
+                boxShadow: 'none',       // 去掉阴影
+                border: 'none',           // 去掉边框
                 '&:hover': {
                   transform: 'scale(1.02)',
                 },
