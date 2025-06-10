@@ -106,6 +106,7 @@ export default function ProductCard({
             muted
             loop
             preload="metadata"
+            controlsList="nodownload" //取消下载按钮
             style={{
               position: 'absolute',
               top: 0,
