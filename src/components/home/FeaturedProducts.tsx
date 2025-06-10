@@ -7,24 +7,28 @@ const products = [
     id: 1,
     name: 'Product A',
     price: 99,
+    memberPrice: 79,
     image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=400&q=100'
   },
   {
     id: 2,
     name: 'Product B',
     price: 199,
+    memberPrice: 159,
     image: 'https://images.unsplash.com/photo-1617806118233-18e1de247200?auto=format&fit=scale&w=800&q=100'
   },
   {
     id: 3,
     name: 'Product C',
     price: 299,
+    memberPrice: 259,
     image: 'https://images.unsplash.com/photo-1580480055273-228ff5388ef8?auto=format&fit=crop&w=400&q=100'
   },
   {
     id: 4,
     name: 'Product D',
     price: 239,
+    memberPrice: 209,
     image: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=400&q=100'
   }
 ];
