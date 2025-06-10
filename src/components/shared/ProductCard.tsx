@@ -121,7 +121,7 @@ export default function ProductCard({
               muted
               loop
               preload="metadata"
-              controls
+              //controls   视频控件整个工具栏都隐藏
               controlsList="nodownload"
               style={{
                 width: '100%',
