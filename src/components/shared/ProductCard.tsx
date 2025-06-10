@@ -17,7 +17,9 @@ import {
 import Image from 'next/image';
 
 interface ProductCardProps {
-  image: string;
+  image?: string;
+  video?: string;
+  type?: 'image' | 'video';
   name: string;
   price: number;
   memberPrice?: number;
@@ -27,6 +29,8 @@ interface ProductCardProps {
 
 export default function ProductCard({
   image,
+  video,
+  type = 'image',
   name,
   price,
   memberPrice,
@@ -51,8 +55,6 @@ export default function ProductCard({
         transition: 'all 0.3s ease',
         bgcolor: 'background.paper',
         borderRadius: 1,
-        // border: '1px solid',
-        // borderColor: 'divider',
         '&:hover': {
           transform: 'scale(1.02)',
           boxShadow: '0 8px 16px rgba(0,0,0,0.1)',
@@ -69,7 +71,7 @@ export default function ProductCard({
         paddingTop: '100%',
         bgcolor: 'grey.50'
       }}>
-        {isLoading && (
+        {isLoading && type === 'image' && (
           <Skeleton
             variant="rectangular"
             sx={{
@@ -82,18 +84,42 @@ export default function ProductCard({
             }}
           />
         )}
-        <Image
-          src={image}
-          alt={name}
-          fill
-          style={{
-            objectFit: 'cover',
-            borderRadius: '8px 8px 0 0'
-          }}
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-          referrerPolicy="no-referrer"
-          onLoadingComplete={() => setIsLoading(false)}
-        />
+        {type === 'image' && image && (
+          <Image
+            src={image}
+            alt={name}
+            fill
+            style={{
+              objectFit: 'cover',
+              borderRadius: '8px 8px 0 0'
+            }}
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+            referrerPolicy="no-referrer"
+            onLoadingComplete={() => setIsLoading(false)}
+          />
+        )}
+        {type === 'video' && video && (
+          <video
+            src={video}
+            controls
+            autoPlay
+            muted
+            loop
+            preload="metadata"
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              borderRadius: '8px 8px 0 0',
+              background: '#eee'
+            }}
+            poster="" // 可选: 可加 poster
+            onLoadedData={() => setIsLoading(false)}
+          />
+        )}
         <IconButton
           className="add-to-cart"
           sx={{
@@ -176,11 +202,11 @@ export default function ProductCard({
             </Typography>
           )}
         </Box>
-        {/* 收藏按钮独占一行，居左，无文字，距离底部16px */}
+        {/* 收藏按钮独占一行，居左，无文字 */}
         <Box
           sx={{
             mt: '0px',
-            mb: '0px',  // <-- 这里是关键
+            mb: '0px',
             display: 'flex',
             alignItems: 'center'
           }}
