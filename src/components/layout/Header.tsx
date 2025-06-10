@@ -15,15 +15,17 @@ import {
 import {
   ShoppingCart as ShoppingCartIcon,
   Person as PersonIcon,
-  Menu as MenuIcon
+  Menu as MenuIcon,
+  FavoriteBorder as FavoriteBorderIcon
 } from '@mui/icons-material';
 import SearchBar from '../shared/SearchBar';
-import Link from 'next/link';
 
 const pages = ['Home', 'Products', 'Categories', 'Deals'];
 
 export default function Header() {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+  // 用于存储哪个图标被“点击/按下”
+  const [activeIcon, setActiveIcon] = useState<string | null>(null);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -32,6 +34,26 @@ export default function Header() {
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
+
+  // 图标的基础高亮样式和active样式
+  const getIconButtonSx = (iconName: string) => ({
+    mx: 0.5,
+    color: 'primary.main',
+    bgcolor: 'rgba(25, 118, 210, 0.08)', // primary.main 的透明背景
+    boxShadow: activeIcon === iconName
+      ? '0 4px 20px rgba(25,118,210,0.15)'
+      : '0 2px 8px rgba(25,118,210,0.10)',
+    transform: activeIcon === iconName
+      ? 'scale(0.90)'
+      : 'scale(1.00)',
+    transition: 'all 0.18s cubic-bezier(.4,0,.2,1)',
+    '&:hover': {
+      bgcolor: 'primary.light',
+      color: 'primary.contrastText',
+      boxShadow: '0 4px 20px rgba(25,118,210,0.17)',
+      transform: 'scale(0.95)',
+    },
+  });
 
   return (
     <AppBar position="sticky" color="inherit" elevation={0}>
@@ -50,8 +72,8 @@ export default function Header() {
               color: 'primary.main',
               textDecoration: 'none',
               borderBottom: '1px solid',
-              borderColor: (theme) => theme.palette.grey[200], // 比背景色略深
-              boxShadow: 'none', // 明确去除阴影
+              borderColor: (theme) => theme.palette.grey[200],
+              boxShadow: 'none',
               backgroundColor: (theme) => theme.palette.background.paper
             }}
           >
@@ -131,13 +153,37 @@ export default function Header() {
           <SearchBar />
 
           {/* Icons */}
-          <Box sx={{ flexGrow: 0 }}>
-            <IconButton size="large" color="inherit">
+          <Box sx={{ flexGrow: 0, display: 'flex', alignItems: 'center', ml: 1 }}>
+            <IconButton
+              size="large"
+              sx={getIconButtonSx('cart')}
+              onMouseDown={() => setActiveIcon('cart')}
+              onMouseUp={() => setActiveIcon(null)}
+              onMouseLeave={() => setActiveIcon(null)}
+              aria-label="购物车"
+            >
               <Badge badgeContent={0} color="error">
                 <ShoppingCartIcon />
               </Badge>
             </IconButton>
-            <IconButton size="large" color="inherit">
+            <IconButton
+              size="large"
+              sx={getIconButtonSx('favorite')}
+              onMouseDown={() => setActiveIcon('favorite')}
+              onMouseUp={() => setActiveIcon(null)}
+              onMouseLeave={() => setActiveIcon(null)}
+              aria-label="收藏"
+            >
+              <FavoriteBorderIcon />
+            </IconButton>
+            <IconButton
+              size="large"
+              sx={getIconButtonSx('person')}
+              onMouseDown={() => setActiveIcon('person')}
+              onMouseUp={() => setActiveIcon(null)}
+              onMouseLeave={() => setActiveIcon(null)}
+              aria-label="用户"
+            >
               <PersonIcon />
             </IconButton>
           </Box>

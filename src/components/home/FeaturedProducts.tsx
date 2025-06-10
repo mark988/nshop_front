@@ -25,7 +25,7 @@ const products = [
     id: 4,
     name: 'Product D',
     price: 239,
-    image: 'https://images.unsplash.com/photo-1580480055273-228ff5388ef8?auto=format&fit=crop&w=400&q=100'
+    image: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=400&q=100'
   }
 ];
 

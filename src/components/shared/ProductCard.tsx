@@ -9,7 +9,11 @@ import {
   IconButton,
   Rating
 } from '@mui/material';
-import { ShoppingCart as ShoppingCartIcon } from '@mui/icons-material';
+import {
+  ShoppingCart as ShoppingCartIcon,
+  FavoriteBorder as FavoriteBorderIcon,
+  Favorite as FavoriteIcon
+} from '@mui/icons-material';
 import Image from 'next/image';
 
 interface ProductCardProps {
@@ -30,6 +34,12 @@ export default function ProductCard({
   rating = 5
 }: ProductCardProps) {
   const [isLoading, setIsLoading] = useState(true);
+  const [favorited, setFavorited] = useState(false);
+
+  const handleFavorite = () => {
+    setFavorited((prev) => !prev);
+    // 可加入收藏接口调用
+  };
 
   return (
     <Card
@@ -46,7 +56,7 @@ export default function ProductCard({
         '&:hover': {
           transform: 'scale(1.02)',
           boxShadow: '0 8px 16px rgba(0,0,0,0.1)',
-          '& .MuiIconButton-root': {
+          '& .MuiIconButton-root.add-to-cart': {
             opacity: 1,
             transform: 'translateY(0)',
           }
@@ -134,33 +144,69 @@ export default function ProductCard({
         >
           {name}
         </Typography>
-        <Box sx={{
-          mt: 'auto',
-          display: 'flex',
-          alignItems: 'center',
-          gap: 1
-        }}>
+        {/* 价格行 */}
+        <Box
+          sx={{
+            mt: 'auto',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 1
+          }}
+        >
           <Typography
-            variant="h6"
+            variant="body1"
             sx={{
               fontWeight: 600,
-              color: 'text.primary'
+              color: memberPrice ? 'text.secondary' : 'text.primary',
+              textDecoration: memberPrice ? 'line-through' : 'none'
             }}
           >
             ${price}
           </Typography>
-          {memberPrice && memberPrice > price && (
+          {memberPrice && (
             <Typography
-              variant="body2"
+              variant="h6"
               sx={{
-                color: 'text.secondary',
-                textDecoration: 'line-through'
+                fontWeight: 700,
+                color: 'primary.main',
+                ml: 1
               }}
             >
-              ${memberPrice}
+              Member Price:${memberPrice}
             </Typography>
           )}
         </Box>
+        {/* 收藏按钮独占一行，居左，无文字 */}
+        <Box
+          sx={{
+            mt: 1,
+            display: 'flex',
+            alignItems: 'center'
+          }}
+        >
+          <IconButton
+            size="small"
+            aria-label="收藏"
+            onClick={handleFavorite}
+            sx={{
+              color: favorited ? '#1a73e8' : 'primary.main',
+              bgcolor: favorited ? 'rgba(20,100,255,0.08)' : 'transparent',
+              transition: 'background 0.2s, color 0.2s',
+              p: '4px',
+              '&:hover': {
+                bgcolor: favorited ? '#1a73e8' : 'primary.light',
+                color: 'primary.contrastText'
+              }
+            }}
+          >
+            {favorited ? <FavoriteIcon fontSize="small" /> : <FavoriteBorderIcon fontSize="small" />}
+          </IconButton>
+        </Box>
+        {description && (
+          <Typography variant="body2" color="text.secondary" noWrap mt={1}>
+            {description}
+          </Typography>
+        )}
       </CardContent>
     </Card>
   );
