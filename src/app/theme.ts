@@ -70,5 +70,14 @@ export const theme = createTheme({
         },
       },
     },
+    MuiCardContent: {
+      styleOverrides: {
+        root: {
+          '&:last-child': {
+            paddingBottom: '16px', // 全局修改
+          },
+        },
+      },
+    },
   },
 });

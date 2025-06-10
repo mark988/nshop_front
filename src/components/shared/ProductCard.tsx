@@ -176,10 +176,11 @@ export default function ProductCard({
             </Typography>
           )}
         </Box>
-        {/* 收藏按钮独占一行，居左，无文字 */}
+        {/* 收藏按钮独占一行，居左，无文字，距离底部16px */}
         <Box
           sx={{
-            mt: 1,
+            mt: '0px',
+            mb: '0px',  // <-- 这里是关键
             display: 'flex',
             alignItems: 'center'
           }}
