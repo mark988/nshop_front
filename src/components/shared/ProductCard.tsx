@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import Link from 'next/link';
 import {
   Card,
   CardContent,
@@ -17,6 +18,7 @@ import {
 import Image from 'next/image';
 
 interface ProductCardProps {
+  id: number;
   image?: string;
   video?: string;
   type?: 'image' | 'video';
@@ -28,6 +30,7 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({
+  id,
   image,
   video,
   type = 'image',
@@ -71,56 +74,67 @@ export default function ProductCard({
         paddingTop: '100%',
         bgcolor: 'grey.50'
       }}>
-        {isLoading && type === 'image' && (
-          <Skeleton
-            variant="rectangular"
-            sx={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              borderRadius: '8px 8px 0 0'
-            }}
-          />
-        )}
-        {type === 'image' && image && (
-          <Image
-            src={image}
-            alt={name}
-            fill
-            style={{
-              objectFit: 'cover',
-              borderRadius: '8px 8px 0 0'
-            }}
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-            referrerPolicy="no-referrer"
-            onLoadingComplete={() => setIsLoading(false)}
-          />
-        )}
-        {type === 'video' && video && (
-          <video
-            src={video}
-            controls
-            autoPlay
-            muted
-            loop
-            preload="metadata"
-            controlsList="nodownload" //取消下载按钮
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              borderRadius: '8px 8px 0 0',
-              background: '#eee'
-            }}
-            poster="" // 可选: 可加 poster
-            onLoadedData={() => setIsLoading(false)}
-          />
-        )}
+        <Link
+          href={`/product/${id}`}
+          style={{
+            display: 'block',
+            position: 'absolute',
+            inset: 0,
+            zIndex: 2,
+            borderRadius: '8px 8px 0 0',
+            overflow: 'hidden'
+          }}
+          tabIndex={-1}
+        >
+          {isLoading && type === 'image' && (
+            <Skeleton
+              variant="rectangular"
+              sx={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                borderRadius: '8px 8px 0 0',
+                zIndex: 1
+              }}
+            />
+          )}
+          {type === 'image' && image && (
+            <Image
+              src={image}
+              alt={name}
+              fill
+              style={{
+                objectFit: 'cover',
+                borderRadius: '8px 8px 0 0'
+              }}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+              referrerPolicy="no-referrer"
+              onLoadingComplete={() => setIsLoading(false)}
+            />
+          )}
+          {type === 'video' && video && (
+            <video
+              src={video}
+              autoPlay
+              muted
+              loop
+              preload="metadata"
+              controls
+              controlsList="nodownload"
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                borderRadius: '8px 8px 0 0',
+                background: '#eee'
+              }}
+              poster=""
+              onLoadedData={() => setIsLoading(false)}
+            />
+          )}
+        </Link>
         <IconButton
           className="add-to-cart"
           sx={{
@@ -132,6 +146,7 @@ export default function ProductCard({
             opacity: 0,
             transform: 'translateY(10px)',
             transition: 'all 0.3s ease',
+            zIndex: 3,
             '&:hover': {
               bgcolor: 'white',
               color: 'primary.main'
