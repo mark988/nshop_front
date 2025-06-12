@@ -27,9 +27,9 @@ export default function SearchBar() {
           display: 'flex',
           alignItems: 'center',
           width: '100%',
-          border: '1px solid #e0e0e0',        // 柔和细边
+          //border: '1px solid #e0e0e0',        // 柔和细边
           boxShadow: 'none',                   // 无阴影
-          borderRadius: 1,                     // 圆角
+          borderRadius: '6px',                     // 圆角
           backgroundColor: '#f5f6fa',          // 柔和浅色
           height: 42,                          // 高度更舒适
           transition: theme => theme.transitions.create(['border-color', 'background-color']),

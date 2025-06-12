@@ -153,22 +153,34 @@ export default function Header() {
           <SearchBar />
 
           {/* Icons */}
-          <Box sx={{ flexGrow: 0, display: 'flex', alignItems: 'center', ml: 1 }}>
+          <Box sx={{ flexGrow: 0, display: 'flex', alignItems: 'center', ml: 1, height: 40 }}>
             <IconButton
-              size="large"
-              sx={getIconButtonSx('cart')}
+              size="medium"
+              sx={{
+                ...getIconButtonSx('cart'),
+                p: 0.75, // padding更小
+                '& svg': { fontSize: 22 },
+                minWidth: 32,
+                minHeight: 32,
+              }}
               onMouseDown={() => setActiveIcon('cart')}
               onMouseUp={() => setActiveIcon(null)}
               onMouseLeave={() => setActiveIcon(null)}
               aria-label="购物车"
             >
-              <Badge badgeContent={0} color="error">
+              <Badge badgeContent={0} color="error" sx={{ '& .MuiBadge-badge': { fontSize: '0.70rem', minWidth: 16, height: 16 } }}>
                 <ShoppingCartIcon />
               </Badge>
             </IconButton>
             <IconButton
-              size="large"
-              sx={getIconButtonSx('favorite')}
+              size="medium"
+              sx={{
+                ...getIconButtonSx('favorite'),
+                p: 0.75,
+                '& svg': { fontSize: 22 },
+                minWidth: 32,
+                minHeight: 32,
+              }}
               onMouseDown={() => setActiveIcon('favorite')}
               onMouseUp={() => setActiveIcon(null)}
               onMouseLeave={() => setActiveIcon(null)}
@@ -177,8 +189,14 @@ export default function Header() {
               <FavoriteBorderIcon />
             </IconButton>
             <IconButton
-              size="large"
-              sx={getIconButtonSx('person')}
+              size="medium"
+              sx={{
+                ...getIconButtonSx('person'),
+                p: 0.75,
+                '& svg': { fontSize: 22 },
+                minWidth: 32,
+                minHeight: 32,
+              }}
               onMouseDown={() => setActiveIcon('person')}
               onMouseUp={() => setActiveIcon(null)}
               onMouseLeave={() => setActiveIcon(null)}
