@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import {
   Box,
@@ -13,15 +13,18 @@ import {
   IconButton,
   Rating,
   Skeleton,
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel
 } from '@mui/material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { Favorite, FavoriteBorder, ShoppingCart } from '@mui/icons-material';
 
-// 引入自定义样式（推荐更健壮做法）
 import './products.css';
 
-// 示例商品数据
+// 产品数据可支持 type: 'image' | 'video'，video/videoPoster 字段
 const products = [
   {
     id: 1,
@@ -32,6 +35,9 @@ const products = [
     reviews: 120,
     desc: '',
     category: 'Men',
+    brand: 'IKEA',
+    sales: 120,
+    type: 'image',
   },
   {
     id: 2,
@@ -42,6 +48,102 @@ const products = [
     reviews: 86,
     desc: '',
     category: 'Women',
+    brand: 'Ashley',
+    sales: 300,
+    type: 'image',
+  },
+  {
+    id: 3,
+    name: 'Kid Table',
+    price: 89.99,
+    image: 'https://plus.unsplash.com/premium_photo-1688125414822-c1daf8543ffb',
+    rating: 4.3,
+    reviews: 21,
+    desc: '',
+    category: 'Children',
+    brand: 'IKEA',
+    sales: 80,
+    type: 'image',
+  },
+  {
+    id: 4,
+    name: 'ElegantLabmp',
+    price: 59.99,
+    image: 'https://plus.unsplash.com/premium_photo-1688125414822-c1daf8543ffb',
+    rating: 4.8,
+    reviews: 65,
+    desc: '',
+    category: 'Men',
+    brand: 'Philips',
+    sales: 20,
+    type: 'image',
+  },
+  {
+    id: 5,
+    name: 'Elegant Lamp-test',
+    price: 259.99,
+    image: 'https://plus.unsplash.com/premium_photo-1688125414822-c1daf8543ffb',
+    rating: 4.8,
+    reviews: 65,
+    desc: '',
+    category: 'Men',
+    brand: 'Philips',
+    sales: 10,
+    type: 'image',
+  },
+  {
+    id: 6,
+    name: 'Elegant Jack',
+    price: 659.99,
+    image: 'https://plus.unsplash.com/premium_photo-1688125414822-c1daf8543ffb',
+    rating: 4.8,
+    reviews: 65,
+    desc: '',
+    category: 'Men',
+    brand: 'Philips',
+    sales: 290,
+    type: 'image',
+  },
+  {
+    id: 7,
+    name: 'Elegant Jack-7',
+    price: 659.99,
+    image: 'https://ix-marketing.imgix.net/case-study_culturekings2.png',
+    rating: 4.8,
+    reviews: 65,
+    desc: '',
+    category: 'Men',
+    brand: 'Philips',
+    sales: 290,
+    type: 'image',
+  },
+  {
+    id: 8,
+    name: 'Elegant Jack-8',
+    price: 659.99,
+    image: 'https://ix-marketing.imgix.net/case-study_upworthy.png',
+    rating: 4.8,
+    reviews: 65,
+    desc: '',
+    category: 'Men',
+    brand: 'Philips',
+    sales: 290,
+    type: 'image',
+  },
+  {
+    id: 9,
+    name: 'Jack-9',
+    price: 9.99,
+    video: 'https://www.w3schools.com/html/mov_bbb.mp4',
+    videoPoster: 'https://ix-marketing.imgix.net/case-study_tile_rew.png',
+    image: 'https://ix-marketing.imgix.net/case-study_tile_rew.png',
+    rating: 4.8,
+    reviews: 65,
+    desc: '',
+    category: 'Men',
+    brand: 'Philips',
+    sales: 99990,
+    type: 'video',
   },
   // ...其余商品数据
 ];
@@ -54,12 +156,16 @@ const tabItems = [
 ];
 
 const PRODUCTS_PER_PAGE = 8;
+const allBrands = Array.from(new Set(products.map(item => item.brand).filter(Boolean)));
 
 export default function AllProductsPage() {
   const [tab, setTab] = useState('all');
   const [page, setPage] = useState(1);
   const [favorited, setFavorited] = useState<{ [key: number]: boolean }>({});
   const [imageLoading, setImageLoading] = useState<{ [key: number]: boolean }>({});
+  const [sort, setSort] = useState('default');
+  const [brand, setBrand] = useState('all');
+  const [videoPlay, setVideoPlay] = useState<{ [key: number]: boolean }>({});
   const [hoveredId, setHoveredId] = useState<number | null>(null);
 
   const handleTabChange = (_: React.SyntheticEvent, newValue: string) => {
@@ -67,7 +173,6 @@ export default function AllProductsPage() {
     setPage(1);
   };
 
-  // 收藏
   const handleFavorite = (id: number) => {
     setFavorited((prev) => ({
       ...prev,
@@ -75,18 +180,30 @@ export default function AllProductsPage() {
     }));
   };
 
-  // 商品筛选
-  const filteredProducts = tab === 'all'
-    ? products
-    : products.filter((item) => item.category === tab);
+  const handleVideoPlay = (id: number) => {
+    setVideoPlay(prev => ({ ...prev, [id]: true }));
+  };
 
-  // 分页
-  const pageCount = Math.max(1, Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE));
+  const processedProducts = useMemo(() => {
+    let filtered = tab === 'all'
+      ? products
+      : products.filter(item => item.category === tab);
+
+    if (brand !== 'all') {
+      filtered = filtered.filter(item => item.brand === brand);
+    }
+
+    if (sort === 'price_asc') filtered = [...filtered].sort((a, b) => a.price - b.price);
+    else if (sort === 'price_desc') filtered = [...filtered].sort((a, b) => b.price - a.price);
+    else if (sort === 'sales_desc') filtered = [...filtered].sort((a, b) => (b.sales || 0) - (a.sales || 0));
+    return filtered;
+  }, [tab, brand, sort]);
+
+  const pageCount = Math.max(1, Math.ceil(processedProducts.length / PRODUCTS_PER_PAGE));
   const start = (page - 1) * PRODUCTS_PER_PAGE;
   const end = start + PRODUCTS_PER_PAGE;
-  const displayProducts = filteredProducts.slice(start, end);
+  const displayProducts = processedProducts.slice(start, end);
 
-  // 分页按钮
   const renderPagination = () => (
     <Box
       sx={{
@@ -211,14 +328,49 @@ export default function AllProductsPage() {
           </Tabs>
         </Box>
 
-        {/* 商品整体左移1rem */}
+        {/* 排序&品牌过滤 */}
+        <Box sx={{
+          mb: 2,
+          display: 'flex',
+          alignItems: 'center',
+          gap: 2,
+          flexWrap: 'wrap'
+        }}>
+          <FormControl size="small" sx={{ minWidth: 140 }}>
+            <InputLabel>排序</InputLabel>
+            <Select
+              label="排序"
+              value={sort}
+              onChange={e => { setSort(e.target.value); setPage(1); }}
+            >
+              <MenuItem value="default">默认排序</MenuItem>
+              <MenuItem value="price_asc">价格从低到高</MenuItem>
+              <MenuItem value="price_desc">价格从高到低</MenuItem>
+              <MenuItem value="sales_desc">销量从高到低</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl size="small" sx={{ minWidth: 120 }}>
+            <InputLabel>品牌</InputLabel>
+            <Select
+              label="品牌"
+              value={brand}
+              onChange={e => { setBrand(e.target.value); setPage(1); }}
+            >
+              <MenuItem value="all">全部品牌</MenuItem>
+              {allBrands.map(b => (
+                <MenuItem key={b} value={b}>{b}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
+
         <Grid container spacing={0} className="custom-grid" sx={{ ml: '-1rem' }}>
           {displayProducts.map((item) => (
             <Grid item xs={12} sm={6} md={4} lg={3} key={item.id}>
               <Card
                 elevation={0}
                 sx={{
-                  height: '100%',width: 276,
+                  height: '100%', width: 276,
                   display: 'flex',
                   flexDirection: 'column',
                   transition: 'all 0.3s ease',
@@ -230,7 +382,7 @@ export default function AllProductsPage() {
                   }
                 }}
               >
-                {/* 图片区域 */}
+                {/* 图片/视频区域 */}
                 <Box
                   sx={{
                     position: 'relative',
@@ -258,41 +410,110 @@ export default function AllProductsPage() {
                     }}
                     tabIndex={-1}
                   >
-                    {(!imageLoading[item.id] && !item.image) && (
-                      <Skeleton
-                        variant="rectangular"
-                        sx={{
-                          position: 'absolute',
-                          top: 0,
-                          left: 0,
-                          right: 0,
-                          bottom: 0,
-                          borderRadius: '8px 8px 0 0',
-                          zIndex: 1
-                        }}
-                      />
-                    )}
-                    {item.image && (
-                      <img
-                        src={item.image}
-                        alt={item.name}
-                        style={{
-                          objectFit: 'cover',
-                          borderRadius: '8px 8px 0 0',
-                          position: 'absolute',
-                          width: '100%',
-                          height: '100%',
-                          top: 0,
-                          left: 0,
-                          display: 'block'
-                        }}
-                        onLoad={() => setImageLoading(il => ({ ...il, [item.id]: true }))}
-                        loading="lazy"
-                        referrerPolicy="no-referrer"
-                      />
+                    {/* 视频模式 */}
+                    {item.type === 'video' && item.video ? (
+                      !videoPlay[item.id] ? (
+                        <>
+                          <img
+                            src={item.videoPoster || item.image}
+                            alt={item.name}
+                            style={{
+                              objectFit: 'cover',
+                              borderRadius: '8px 8px 0 0',
+                              position: 'absolute',
+                              width: '100%',
+                              height: '100%',
+                              top: 0,
+                              left: 0,
+                              display: 'block'
+                            }}
+                            loading="lazy"
+                            referrerPolicy="no-referrer"
+                          />
+                          <Box
+                            sx={{
+                              position: 'absolute',
+                              top: '50%',
+                              left: '50%',
+                              transform: 'translate(-50%, -50%)',
+                              width: 48,
+                              height: 48,
+                              bgcolor: 'rgba(0,0,0,0.48)',
+                              borderRadius: '50%',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              zIndex: 3,
+                              cursor: 'pointer'
+                            }}
+                            onClick={e => {
+                              e.preventDefault();
+                              handleVideoPlay(item.id);
+                            }}
+                          >
+                            <svg width="32" height="32" viewBox="0 0 48 48" fill="white">
+                              <polygon points="16,12 40,24 16,36" />
+                            </svg>
+                          </Box>
+                        </>
+                      ) : (
+                        <video
+                          src={item.video}
+                          autoPlay
+                          muted
+                          loop
+                          playsInline
+                          poster={item.videoPoster || item.image}
+                          style={{
+                            objectFit: 'cover',
+                            borderRadius: '8px 8px 0 0',
+                            position: 'absolute',
+                            width: '100%',
+                            height: '100%',
+                            top: 0,
+                            left: 0,
+                            display: 'block',
+                            background: '#eee'
+                          }}
+                        />
+                      )
+                    ) : (
+                      // 图片模式
+                      (!imageLoading[item.id] && !item.image) ? (
+                        <Skeleton
+                          variant="rectangular"
+                          sx={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            borderRadius: '8px 8px 0 0',
+                            zIndex: 1
+                          }}
+                        />
+                      ) : (
+                        <img
+                          src={item.image}
+                          alt={item.name}
+                          style={{
+                            objectFit: 'cover',
+                            borderRadius: '8px 8px 0 0',
+                            position: 'absolute',
+                            width: '100%',
+                            height: '100%',
+                            top: 0,
+                            left: 0,
+                            display: 'block'
+                          }}
+                          onLoad={() => setImageLoading(il => ({ ...il, [item.id]: true }))}
+                          loading="lazy"
+                          referrerPolicy="no-referrer"
+                        />
+                      )
                     )}
 
-                    {/* 购物车按钮，hover时显示，样式同首页 */}
+                    {/* 购物车按钮，hover时显示 */}
                     <Box
                       className="cart-fab"
                       sx={{
@@ -339,7 +560,6 @@ export default function AllProductsPage() {
                       sx={{ color: '#faaf00' }}
                     />
                   </Box>
-                  {/* 商品名称可点击跳转详情 */}
                   <Link
                     href={`/product/${item.id}`}
                     style={{ textDecoration: 'none' }}
@@ -366,7 +586,6 @@ export default function AllProductsPage() {
                       {item.name}
                     </Typography>
                   </Link>
-                  {/* 价格行 */}
                   <Box
                     sx={{
                       mt: 'auto',
@@ -386,7 +605,6 @@ export default function AllProductsPage() {
                     >
                       ${item.price}
                     </Typography>
-                    {/* 模拟会员价 */}
                     <Typography
                       variant="h6"
                       sx={{
@@ -398,7 +616,6 @@ export default function AllProductsPage() {
                       MP:${(item.price - 20).toFixed(2)}
                     </Typography>
                   </Box>
-                  {/* 收藏按钮独占一行，居左，无文字 */}
                   <Box
                     sx={{
                       mt: '0px',
@@ -436,7 +653,6 @@ export default function AllProductsPage() {
           ))}
         </Grid>
 
-        {/* 分页按钮 */}
         {pageCount > 1 && renderPagination()}
       </Container>
     </Box>
