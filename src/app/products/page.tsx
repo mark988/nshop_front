@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import { Favorite, FavoriteBorder } from '@mui/icons-material';
+import { Favorite, FavoriteBorder, ShoppingCart } from '@mui/icons-material';
 
 // 引入自定义样式（推荐更健壮做法）
 import './products.css';
@@ -60,6 +60,7 @@ export default function AllProductsPage() {
   const [page, setPage] = useState(1);
   const [favorited, setFavorited] = useState<{ [key: number]: boolean }>({});
   const [imageLoading, setImageLoading] = useState<{ [key: number]: boolean }>({});
+  const [hoveredId, setHoveredId] = useState<number | null>(null);
 
   const handleTabChange = (_: React.SyntheticEvent, newValue: string) => {
     setTab(newValue);
@@ -230,12 +231,21 @@ export default function AllProductsPage() {
                 }}
               >
                 {/* 图片区域 */}
-                <Box sx={{
-                  position: 'relative',
-                  width: '100%',
-                  paddingTop: '100%',
-                  bgcolor: 'grey.50'
-                }}>
+                <Box
+                  sx={{
+                    position: 'relative',
+                    width: '100%',
+                    paddingTop: '100%',
+                    bgcolor: 'grey.50',
+                    overflow: 'hidden',
+                    '&:hover .cart-fab': {
+                      opacity: 1,
+                      pointerEvents: 'auto'
+                    }
+                  }}
+                  onMouseEnter={() => setHoveredId(item.id)}
+                  onMouseLeave={() => setHoveredId(null)}
+                >
                   <Link
                     href={`/product/${item.id}`}
                     style={{
@@ -281,14 +291,45 @@ export default function AllProductsPage() {
                         referrerPolicy="no-referrer"
                       />
                     )}
+
+                    {/* 购物车按钮，hover时显示，样式同首页 */}
+                    <Box
+                      className="cart-fab"
+                      sx={{
+                        position: 'absolute',
+                        right: 8,
+                        bottom: 8,
+                        bgcolor: '#fff',
+                        borderRadius: '50%',
+                        width: 36,
+                        height: 36,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
+                        opacity: 0,
+                        pointerEvents: 'none',
+                        transition: 'opacity 0.2s',
+                        zIndex: 3,
+                        cursor: 'pointer',
+                        '&:hover .cart-icon': {
+                          color: '#1976d2',
+                        }
+                      }}
+                    >
+                      <ShoppingCart className="cart-icon" sx={{ color: 'rgba(0, 0, 0, 0.54)', fontSize: 20 }} />
+                    </Box>
                   </Link>
                 </Box>
-                <CardContent sx={{
-                  flexGrow: 1,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  p: 1.5 ,pb: '10px !important'
-                }}>
+                <CardContent
+                  sx={{
+                    flexGrow: 1,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    p: 1.5,
+                    pb: '10px !important',
+                  }}
+                >
                   <Box sx={{ mb: 1 }}>
                     <Rating
                       value={item.rating}
