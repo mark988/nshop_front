@@ -1,8 +1,11 @@
 'use client';
 import { Box, Typography, Grid, Card, CardMedia, CardContent } from '@mui/material';
 import { images } from '@/config/images';
+import { useRouter } from 'next/navigation'; // 新增
 
 export default function CategorySection() {
+  const router = useRouter(); // 新增
+
   return (
     <Box sx={{ py: 3 }}>
       <Box
@@ -43,12 +46,13 @@ export default function CategorySection() {
                 height: '100%',
                 cursor: 'pointer',
                 transition: 'transform 0.2s',
-                boxShadow: 'none',       // 去掉阴影
-                border: 'none',           // 去掉边框
+                boxShadow: 'none',
+                border: 'none',
                 '&:hover': {
                   transform: 'scale(1.02)',
                 },
               }}
+              onClick={() => router.push(`/products?tab=${encodeURIComponent(category.name)}`)} // 跳转并带tab参数
             >
               <CardMedia
                 component="img"

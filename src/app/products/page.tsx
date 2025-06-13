@@ -1,5 +1,6 @@
 'use client';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import {
   Box,
@@ -159,6 +160,7 @@ const PRODUCTS_PER_PAGE = 8;
 const allBrands = Array.from(new Set(products.map(item => item.brand).filter(Boolean)));
 
 export default function AllProductsPage() {
+  const searchParams = useSearchParams();
   const [tab, setTab] = useState('all');
   const [page, setPage] = useState(1);
   const [favorited, setFavorited] = useState<{ [key: number]: boolean }>({});
@@ -167,6 +169,24 @@ export default function AllProductsPage() {
   const [brand, setBrand] = useState('all');
   const [videoPlay, setVideoPlay] = useState<{ [key: number]: boolean }>({});
   const [hoveredId, setHoveredId] = useState<number | null>(null);
+
+  // 根据url中tab参数自动切换tab
+  useEffect(() => {
+    const tabParam = searchParams.get('tab');
+    // if (tabParam && tabItems.some(item => item.value === tabParam)) {
+    //   setTab(tabParam);
+    //   setPage(1);
+    // }
+    
+    if (!tabParam || !tabItems.some(item => item.value === tabParam)) {
+      setTab('all');
+      setPage(1);
+    } else {
+      setTab(tabParam);
+      setPage(1);
+    }
+   
+  }, [searchParams]);
 
   const handleTabChange = (_: React.SyntheticEvent, newValue: string) => {
     setTab(newValue);
@@ -283,8 +303,11 @@ export default function AllProductsPage() {
   return (
     <Box sx={{ bgcolor: 'background.default', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <Container maxWidth="lg" sx={{ flex: 1, py: { xs: 3, md: 5 } }}>
-        <Typography variant="h5" fontWeight={700} mb={2} >
+        <Typography variant="h5" fontWeight={700} mb={2}>
           All Products
+        </Typography>
+        <Typography variant="subtitle2" color="text.secondary" mb={3}>
+          共 {processedProducts.length} 件商品
         </Typography>
 
         {/* Tabs 控件 */}
