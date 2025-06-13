@@ -218,7 +218,7 @@ export default function AllProductsPage() {
               <Card
                 elevation={0}
                 sx={{
-                  height: '100%',
+                  height: '100%',width: 276,
                   display: 'flex',
                   flexDirection: 'column',
                   transition: 'all 0.3s ease',

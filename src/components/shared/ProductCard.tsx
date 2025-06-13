@@ -330,17 +330,3 @@ export default function ProductCard({
     </Card>
   );
 }
-
-// 测试用例示例
-// <ProductCard
-//   id={2}
-//   name="Product B"
-//   video="/videos/product-b.mp4"
-//   videoPoster="https://plus.unsplash.com/premium_photo-1690971631383-326a8b5d8ed7"
-//   image="/images/product-b.jpg"
-//   type="video"
-//   price={199}
-//   memberPrice={159}
-//   description="This is product B with video."
-//   rating={5}
-// />
