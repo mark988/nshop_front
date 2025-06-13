@@ -283,8 +283,8 @@ export default function AllProductsPage() {
   return (
     <Box sx={{ bgcolor: 'background.default', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <Container maxWidth="lg" sx={{ flex: 1, py: { xs: 3, md: 5 } }}>
-        <Typography variant="h5" fontWeight={700} mb={4}>
-          All Product
+        <Typography variant="h5" fontWeight={700} mb={2} >
+          All Products
         </Typography>
 
         {/* Tabs 控件 */}
@@ -328,35 +328,108 @@ export default function AllProductsPage() {
           </Tabs>
         </Box>
 
-        {/* 排序&品牌过滤 */}
-        <Box sx={{
-          mb: 2,
-          display: 'flex',
-          alignItems: 'center',
-          gap: 2,
-          flexWrap: 'wrap'
-        }}>
-          <FormControl size="small" sx={{ minWidth: 140 }}>
-            <InputLabel>排序</InputLabel>
+        {/* 优化后的 排序&品牌过滤 */}
+        <Box
+          sx={{
+            mb: 2,
+            display: 'flex',
+            alignItems: 'center',
+            gap: 3,
+            flexWrap: 'wrap',
+          }}
+        >
+          {/* 排序 下拉 */}
+          <FormControl
+            size="small"
+            variant="outlined"
+            sx={{
+              minWidth: 160,
+              bgcolor: 'white',
+              borderRadius: 1,
+              boxShadow: '0 1px 4px rgba(60,60,60,0.04)',
+              '& .MuiInputLabel-root': { fontWeight: 600 },
+              '& .MuiOutlinedInput-root': {
+                  background: 'white',
+                  borderRadius: 1,
+                  '& fieldset': { borderColor: 'grey.100' },
+                  '&:hover fieldset': { borderColor: 'grey.300' },
+                  '&.Mui-focused fieldset': { borderColor: 'grey.300' },
+              },
+            }}
+          >
+            <InputLabel
+              sx={{
+                fontWeight: 600,
+                color: 'grey.700',
+              }}
+            >
+              Sort
+            </InputLabel>
             <Select
               label="排序"
               value={sort}
               onChange={e => { setSort(e.target.value); setPage(1); }}
+              sx={{
+                fontWeight: 500,
+                color: 'grey.800',
+                '& .Mui-selected': { color: 'primary.main', fontWeight: 600 },
+              }}
+              MenuProps={{
+                PaperProps: {
+                  sx: { borderRadius: 1, mt: 1, minWidth: 160 },
+                },
+              }}
             >
-              <MenuItem value="default">默认排序</MenuItem>
-              <MenuItem value="price_asc">价格从低到高</MenuItem>
-              <MenuItem value="price_desc">价格从高到低</MenuItem>
+              <MenuItem value="default">DEFAULT</MenuItem>
+              <MenuItem value="price_asc">Price Low to High</MenuItem>
+              <MenuItem value="price_desc">Price High to Low</MenuItem>
               <MenuItem value="sales_desc">销量从高到低</MenuItem>
             </Select>
           </FormControl>
-          <FormControl size="small" sx={{ minWidth: 120 }}>
-            <InputLabel>品牌</InputLabel>
+
+          {/* 品牌 下拉 */}
+          <FormControl
+            size="small"
+            variant="outlined"
+            sx={{
+              minWidth: 150,
+              bgcolor: 'white',
+              borderRadius: 1,
+              boxShadow: '0 1px 4px rgba(60,60,60,0.04)',
+              '& .MuiInputLabel-root': { fontWeight: 600 },
+              '& .MuiOutlinedInput-root': {
+                   background: 'white',
+                   borderRadius: 1,
+                  '& fieldset': { borderColor: 'grey.100' },
+                  '&:hover fieldset': { borderColor: 'grey.300' },
+                  '&.Mui-focused fieldset': { borderColor: 'grey.300' },
+              },
+            }}
+          >
+            <InputLabel
+              sx={{
+                fontWeight: 600,
+                color: 'grey.700',
+              }}
+            >
+              Brand
+            </InputLabel>
             <Select
               label="品牌"
               value={brand}
               onChange={e => { setBrand(e.target.value); setPage(1); }}
+              sx={{
+                fontWeight: 500,
+                color: 'grey.800',
+                '& .Mui-selected': { color: 'primary.main', fontWeight: 600 },
+              }}
+              MenuProps={{
+                PaperProps: {
+                  sx: { borderRadius: 1, mt: 1, minWidth: 150 },
+                },
+              }}
             >
-              <MenuItem value="all">全部品牌</MenuItem>
+              <MenuItem value="all">ALL</MenuItem>
               {allBrands.map(b => (
                 <MenuItem key={b} value={b}>{b}</MenuItem>
               ))}
