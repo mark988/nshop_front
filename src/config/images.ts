@@ -81,19 +81,19 @@ export const images = {
     {
       id: 1,
       path: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace',
-      name: 'Living Room',
-      description: 'Sofas, coffee tables, and more.'
+      name: 'Men',
+      description: 'Pants, hats, jackets, underwear'
     },
     {
       id: 2,
       path: 'https://images.unsplash.com/photo-1617806118233-18e1de247200',
-      name: 'Dining Room',
+      name: 'Women',
       description: 'Dining tables, chairs, and accessories.'
     },
     {
       id: 3,
       path: 'https://images.unsplash.com/photo-1616594039964-ae9021a400a0',
-      name: 'Bedroom',
+      name: 'Children',
       description: 'Beds, nightstands, and bedding.'
     },
     {
