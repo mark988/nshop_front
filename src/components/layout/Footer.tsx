@@ -35,7 +35,7 @@ export default function Footer() {
             underline="none"
             color="text.secondary"
             sx={{
-              fontSize: '1rem',
+              fontSize: '0.9rem',
               fontWeight: 400,
               textAlign: 'center',
               letterSpacing: 0.1,
@@ -49,7 +49,7 @@ export default function Footer() {
             underline="none"
             color="text.secondary"
             sx={{
-              fontSize: '1rem',
+              fontSize: '0.9rem',
               fontWeight: 400,
               textAlign: 'center',
               letterSpacing: 0.1,
@@ -63,7 +63,7 @@ export default function Footer() {
             underline="none"
             color="text.secondary"
             sx={{
-              fontSize: '1rem',
+              fontSize: '0.9rem',
               fontWeight: 400,
               textAlign: 'center',
               letterSpacing: 0.1,
@@ -77,7 +77,7 @@ export default function Footer() {
             underline="none"
             color="text.secondary"
             sx={{
-              fontSize: '1rem',
+              fontSize: '0.9rem',
               fontWeight: 400,
               textAlign: 'center',
               letterSpacing: 0.1,
@@ -91,7 +91,7 @@ export default function Footer() {
             underline="none"
             color="text.secondary"
             sx={{
-              fontSize: '1rem',
+              fontSize: '0.9rem',
               fontWeight: 400,
               textAlign: 'center',
               letterSpacing: 0.1,

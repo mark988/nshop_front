@@ -1,0 +1,4 @@
+.custom-grid > .MuiGrid-item {
+    padding-left: 16px !important;
+    padding-top: 16px !important;
+  }

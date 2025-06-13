@@ -19,8 +19,14 @@ import {
   FavoriteBorder as FavoriteBorderIcon
 } from '@mui/icons-material';
 import SearchBar from '../shared/SearchBar';
+import Link from 'next/link';
 
-const pages = ['Home', 'Products', 'Categories', 'Deals'];
+const pages = [
+  { name: 'Home', path: '/' },
+  { name: 'Products', path: '/products' },
+  { name: 'Categories', path: '/categories' },
+  { name: 'Deals', path: '/deals' },
+];
 
 export default function Header() {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
@@ -63,7 +69,7 @@ export default function Header() {
           <Typography
             variant="h6"
             noWrap
-            component="a"
+            component={Link}
             href="/"
             sx={{
               mr: 2,
@@ -111,8 +117,13 @@ export default function Header() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+                <MenuItem
+                  key={page.name}
+                  component={Link}
+                  href={page.path}
+                  onClick={handleCloseNavMenu}
+                >
+                  <Typography textAlign="center">{page.name}</Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -122,7 +133,7 @@ export default function Header() {
           <Typography
             variant="h6"
             noWrap
-            component="a"
+            component={Link}
             href="/"
             sx={{
               mr: 2,
@@ -140,11 +151,13 @@ export default function Header() {
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
               <Button
-                key={page}
+                key={page.name}
+                component={Link}
+                href={page.path}
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'text.primary', display: 'block' }}
               >
-                {page}
+                {page.name}
               </Button>
             ))}
           </Box>

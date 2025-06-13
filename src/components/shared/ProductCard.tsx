@@ -290,7 +290,7 @@ export default function ProductCard({
                 ml: 1
               }}
             >
-              Member Price:${memberPrice}
+              MP:${memberPrice}
             </Typography>
           )}
         </Box>
