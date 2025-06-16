@@ -17,7 +17,8 @@ import {
   MenuItem,
   Select,
   FormControl,
-  InputLabel
+  InputLabel,
+  useTheme
 } from '@mui/material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -161,6 +162,7 @@ const allBrands = Array.from(new Set(products.map(item => item.brand).filter(Boo
 
 export default function AllProductsPage() {
   const searchParams = useSearchParams();
+  const theme = useTheme();
   const [tab, setTab] = useState('all');
   const [page, setPage] = useState(1);
   const [favorited, setFavorited] = useState<{ [key: number]: boolean }>({});
@@ -170,14 +172,9 @@ export default function AllProductsPage() {
   const [videoPlay, setVideoPlay] = useState<{ [key: number]: boolean }>({});
   const [hoveredId, setHoveredId] = useState<number | null>(null);
 
-  // 根据url中tab参数自动切换tab
+  // tab参数判断逻辑，任何不合法的tab都重置为all
   useEffect(() => {
     const tabParam = searchParams.get('tab');
-    // if (tabParam && tabItems.some(item => item.value === tabParam)) {
-    //   setTab(tabParam);
-    //   setPage(1);
-    // }
-    
     if (!tabParam || !tabItems.some(item => item.value === tabParam)) {
       setTab('all');
       setPage(1);
@@ -185,7 +182,6 @@ export default function AllProductsPage() {
       setTab(tabParam);
       setPage(1);
     }
-   
   }, [searchParams]);
 
   const handleTabChange = (_: React.SyntheticEvent, newValue: string) => {
@@ -223,6 +219,43 @@ export default function AllProductsPage() {
   const start = (page - 1) * PRODUCTS_PER_PAGE;
   const end = start + PRODUCTS_PER_PAGE;
   const displayProducts = processedProducts.slice(start, end);
+
+  // 优雅美观的Tab样式
+  const tabSx = {
+    minHeight: 44,
+    mb: 1,
+    '& .MuiTabs-flexContainer': {
+      gap: 0,
+    },
+    '& .MuiTab-root': {
+      minHeight: 44,
+      px: 0,
+      mr: 0,
+      borderRadius: '3px',
+      fontWeight: 600,
+      fontSize: 16,
+      color: 'grey.600',
+      textTransform: 'none',
+      letterSpacing: 0,
+     // transition: 'background 0.18s, color 0.18s',
+     // background: 'transparent',
+      '&:hover': {
+        //background: theme.palette.grey[100],
+        background: theme.palette.grey[200],
+        //字体颜色
+        color: theme.palette.primary.main,
+     
+      },
+      '&.Mui-selected': {
+        background: theme.palette.primary.main,
+        color: theme.palette.primary.contrastText,
+        boxShadow: '0 2px 8px 0 rgba(0,0,0,0.07)',
+      },
+    },
+    '& .MuiTabs-indicator': {
+      display: 'none',
+    },
+  };
 
   const renderPagination = () => (
     <Box
@@ -310,44 +343,25 @@ export default function AllProductsPage() {
           共 {processedProducts.length} 件商品
         </Typography>
 
-        {/* Tabs 控件 */}
-        <Box sx={{ mb: 3, borderBottom: '1px solid', borderColor: 'grey.200' }}>
+        {/* 优雅Tabs 控件 */}
+        <Box sx={{ mb: 3 }}>
           <Tabs
             value={tab}
             onChange={handleTabChange}
             aria-label="product categories"
-            TabIndicatorProps={{
-              sx: {
-                height: 2,
-                bgcolor: 'common.black',
-                borderRadius: 2,
-              },
-            }}
-            sx={{
-              minHeight: 40,
-              '& .MuiTab-root': {
-                minHeight: 40,
-                px: 0,
-                mr: 4,
-                fontWeight: 600,
-                fontSize: 15,
-                color: 'grey.700',
-                textTransform: 'none',
-                letterSpacing: 0,
-                '&.Mui-selected': {
-                  color: 'common.black',
-                },
-              },
-            }}
+            sx={tabSx}
+            variant="scrollable"
+            scrollButtons={false}
           >
-            {tabItems.map((item) => (
+          {tabItems.map((item) => (
               <Tab
                 key={item.value}
                 label={item.label}
                 value={item.value}
                 disableRipple
               />
-            ))}
+            ))} 
+            
           </Tabs>
         </Box>
 
