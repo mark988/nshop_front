@@ -225,7 +225,8 @@ export default function ProductCard({
         flexGrow: 1,
         display: 'flex',
         flexDirection: 'column',
-        p: 2
+        p: 1.5,
+        pb: '10px !important',
       }}>
         <Box sx={{ mb: 1 }}>
           <Rating
@@ -267,7 +268,7 @@ export default function ProductCard({
           sx={{
             mt: 'auto',
             display: 'flex',
-            alignItems: 'center',
+            alignItems: 'center',justifyContent: 'space-between',
             gap: 1
           }}
         >
