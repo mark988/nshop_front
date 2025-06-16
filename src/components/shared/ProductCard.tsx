@@ -84,7 +84,7 @@ export default function ProductCard({
         bgcolor: 'grey.50'
       }}>
         <Link
-          href={`/product/${id}`}
+          href={`/products/${id}`}
           style={{
             display: 'block',
             position: 'absolute',
@@ -238,7 +238,7 @@ export default function ProductCard({
         </Box>
         {/* 商品名称可点击跳转详情 */}
         <Link 
-          href={`/product/${id}`} 
+          href={`/products/${id}`} 
           style={{ textDecoration: 'none' }}
         >
           <Typography
