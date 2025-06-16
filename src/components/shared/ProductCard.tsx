@@ -233,7 +233,7 @@ export default function ProductCard({
             value={rating}
             readOnly
             size="small"
-            sx={{ color: 'primary.main' }}
+            //sx={{ color: 'primary.main' }}
           />
         </Box>
         {/* 商品名称可点击跳转详情 */}
