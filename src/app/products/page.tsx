@@ -27,6 +27,7 @@ import { Favorite, FavoriteBorder, ShoppingCart } from '@mui/icons-material';
 import './products.css';
 
 // 产品数据可支持 type: 'image' | 'video'，video/videoPoster 字段
+// 产品数据可支持 type: 'image' | 'video'，video/videoPoster 字段
 const products = [
   {
     id: 1,
@@ -163,7 +164,13 @@ const allBrands = Array.from(new Set(products.map(item => item.brand).filter(Boo
 export default function AllProductsPage() {
   const searchParams = useSearchParams();
   const theme = useTheme();
-  const [tab, setTab] = useState('all');
+  
+  // 修改：使用函数初始化 state，直接从 URL 获取初始值
+  const [tab, setTab] = useState(() => {
+    const tabParam = searchParams.get('tab');
+    return tabParam && tabItems.some(item => item.value === tabParam) ? tabParam : 'all';
+  });
+  
   const [page, setPage] = useState(1);
   const [favorited, setFavorited] = useState<{ [key: number]: boolean }>({});
   const [imageLoading, setImageLoading] = useState<{ [key: number]: boolean }>({});
@@ -172,7 +179,7 @@ export default function AllProductsPage() {
   const [videoPlay, setVideoPlay] = useState<{ [key: number]: boolean }>({});
   const [hoveredId, setHoveredId] = useState<number | null>(null);
 
-  // tab参数判断逻辑，任何不合法的tab都重置为all
+  // 修改：只在 searchParams 变化时更新
   useEffect(() => {
     const tabParam = searchParams.get('tab');
     if (!tabParam || !tabItems.some(item => item.value === tabParam)) {
@@ -220,7 +227,7 @@ export default function AllProductsPage() {
   const end = start + PRODUCTS_PER_PAGE;
   const displayProducts = processedProducts.slice(start, end);
 
-  // 优雅美观的Tab样式
+  // Tab 样式
   const tabSx = {
     minHeight: 44,
     mb: 1,
@@ -237,14 +244,9 @@ export default function AllProductsPage() {
       color: 'grey.600',
       textTransform: 'none',
       letterSpacing: 0,
-     // transition: 'background 0.18s, color 0.18s',
-     // background: 'transparent',
       '&:hover': {
-        //background: theme.palette.grey[100],
         background: theme.palette.grey[200],
-        //字体颜色
         color: theme.palette.primary.main,
-     
       },
       '&.Mui-selected': {
         background: theme.palette.primary.main,
@@ -343,7 +345,7 @@ export default function AllProductsPage() {
           共 {processedProducts.length} 件商品
         </Typography>
 
-        {/* 优雅Tabs 控件 */}
+        {/* Tabs 控件 */}
         <Box sx={{ mb: 3 }}>
           <Tabs
             value={tab}
@@ -353,19 +355,18 @@ export default function AllProductsPage() {
             variant="scrollable"
             scrollButtons={false}
           >
-          {tabItems.map((item) => (
+            {tabItems.map((item) => (
               <Tab
                 key={item.value}
                 label={item.label}
                 value={item.value}
                 disableRipple
               />
-            ))} 
-            
+            ))}
           </Tabs>
         </Box>
 
-        {/* 优化后的 排序&品牌过滤 */}
+        {/* 排序&品牌过滤 */}
         <Box
           sx={{
             mb: 2,
@@ -375,7 +376,7 @@ export default function AllProductsPage() {
             flexWrap: 'wrap',
           }}
         >
-          {/* 排序 下拉 */}
+          {/* 排序下拉 */}
           <FormControl
             size="small"
             variant="outlined"
@@ -386,20 +387,15 @@ export default function AllProductsPage() {
               boxShadow: '0 1px 4px rgba(60,60,60,0.04)',
               '& .MuiInputLabel-root': { fontWeight: 600 },
               '& .MuiOutlinedInput-root': {
-                  background: 'white',
-                  borderRadius: 1,
-                  '& fieldset': { borderColor: 'grey.100' },
-                  '&:hover fieldset': { borderColor: 'grey.300' },
-                  '&.Mui-focused fieldset': { borderColor: 'grey.300' },
+                background: 'white',
+                borderRadius: 1,
+                '& fieldset': { borderColor: 'grey.100' },
+                '&:hover fieldset': { borderColor: 'grey.300' },
+                '&.Mui-focused fieldset': { borderColor: 'grey.300' },
               },
             }}
           >
-            <InputLabel
-              sx={{
-                fontWeight: 600,
-                color: 'grey.700',
-              }}
-            >
+            <InputLabel sx={{ fontWeight: 600, color: 'grey.700' }}>
               Sort
             </InputLabel>
             <Select
@@ -424,7 +420,7 @@ export default function AllProductsPage() {
             </Select>
           </FormControl>
 
-          {/* 品牌 下拉 */}
+          {/* 品牌下拉 */}
           <FormControl
             size="small"
             variant="outlined"
@@ -435,20 +431,15 @@ export default function AllProductsPage() {
               boxShadow: '0 1px 4px rgba(60,60,60,0.04)',
               '& .MuiInputLabel-root': { fontWeight: 600 },
               '& .MuiOutlinedInput-root': {
-                   background: 'white',
-                   borderRadius: 1,
-                  '& fieldset': { borderColor: 'grey.100' },
-                  '&:hover fieldset': { borderColor: 'grey.300' },
-                  '&.Mui-focused fieldset': { borderColor: 'grey.300' },
+                background: 'white',
+                borderRadius: 1,
+                '& fieldset': { borderColor: 'grey.100' },
+                '&:hover fieldset': { borderColor: 'grey.300' },
+                '&.Mui-focused fieldset': { borderColor: 'grey.300' },
               },
             }}
           >
-            <InputLabel
-              sx={{
-                fontWeight: 600,
-                color: 'grey.700',
-              }}
-            >
+            <InputLabel sx={{ fontWeight: 600, color: 'grey.700' }}>
               Brand
             </InputLabel>
             <Select
@@ -480,7 +471,8 @@ export default function AllProductsPage() {
               <Card
                 elevation={0}
                 sx={{
-                  height: '100%', width: 276,
+                  height: '100%',
+                  width: 276,
                   display: 'flex',
                   flexDirection: 'column',
                   transition: 'all 0.3s ease',
@@ -623,7 +615,7 @@ export default function AllProductsPage() {
                       )
                     )}
 
-                    {/* 购物车按钮，hover时显示 */}
+                    {/* 购物车按钮 */}
                     <Box
                       className="cart-fab"
                       sx={{
