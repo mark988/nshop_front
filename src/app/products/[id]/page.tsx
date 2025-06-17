@@ -68,6 +68,7 @@ const getProduct = (id: string) => ({
   stock: 50,
   deliveryTime: '3-5 business days',
   warranty: '2 years',
+  sizes: ['Small', 'Middle', 'Large'], // 添加尺寸选项
   colors: ['White', 'Natural Wood', 'Pink', 'Blue'],
   category: 'Children',
   brand: 'IKEA',
@@ -88,8 +89,16 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState('description');
   const [selectedColor, setSelectedColor] = useState('');
+  const [selectedSize, setSelectedSize] = useState('');
   const [isImageLoading, setIsImageLoading] = useState(true);
   const [videoPlay, setVideoPlay] = useState(false);
+
+  useEffect(() => {
+    const productData = getProduct(params.id);
+    setProduct(productData);
+    setSelectedColor(productData.colors[0]);
+    setSelectedSize(productData.sizes[0]); // 设置默认尺寸
+  }, [params.id]);
 
   useEffect(() => {
     // 模拟API调用
@@ -266,7 +275,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
 
           {/* 右侧商品信息 */}
           <Grid item xs={12} md={6}>
-            <Typography variant="h4" component="h1" gutterBottom fontWeight={600}>
+            <Typography variant="h5" component="h5" gutterBottom fontWeight={600}>
               {product.name}
             </Typography>
             
@@ -277,7 +286,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
               </Typography>
             </Box>
 
-            <Box sx={{ display: 'flex', alignItems: 'baseline', mb: 3 }}>
+            <Box sx={{ display: 'flex', alignItems: 'baseline', mb: 2 }}>
               <Typography
                 variant="h4"
                 component="span"
@@ -297,10 +306,47 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
               </Typography>
             </Box>
 
-            <Divider sx={{ my: 3 }} />
-
+            <Divider sx={{ my: 1 }} />
+            
+            {/* 尺寸选择 */}
+            <Box sx={{ mb: 2 }}>
+              <Typography variant="subtitle1" gutterBottom fontWeight={600}>
+                Size
+              </Typography>
+              <Stack direction="row" spacing={1}>
+                {product.sizes.map((size: string) => (
+                  <Button
+                    key={size}
+                    variant={selectedSize === size ? 'contained' : 'outlined'}
+                    sx={{
+                      minWidth: 'auto',
+                      px: 2,
+                      py: 1,
+                     //  border: 0,
+                      borderColor:  'primary.main',
+                      borderRadius: 1,
+                      textTransform: 'none',
+                      backgroundColor: selectedSize === size ? 'primary.main' : 'transparent',
+                      //borderColor: selectedSize === size ? 'primary.main' : 'grey.300',
+                      //color: selectedSize === size ? 'white' : 'text.primary',
+                      color: selectedSize === size ? 'white' : 'primary.main',
+                      //color:  'primary.main',
+                      '&:hover': {
+                        backgroundColor: selectedSize === size ? 'primary.dark' : 'grey.50',
+                        //borderColor: selectedSize === size ? 'primary.dark' : 'grey.400',
+                        borderColor:  'primary.main',
+                      },
+                      fontWeight: selectedSize === size ? 600 : 400,
+                    }}
+                    onClick={() => setSelectedSize(size)}
+                  >
+                    {size}
+                  </Button>
+                ))}
+              </Stack>
+            </Box>
             {/* 颜色选择 */}
-            <Box sx={{ mb: 3 }}>
+            <Box sx={{ mb: 2 }}>
               <Typography variant="subtitle1" gutterBottom fontWeight={600}>
                 Color
               </Typography>
@@ -325,32 +371,77 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
             </Box>
 
             {/* 数量选择 */}
-            <Box sx={{ mb: 3 }}>
+            <Box sx={{ mb: 2 }}>
               <Typography variant="subtitle1" gutterBottom fontWeight={600}>
                 Quantity
               </Typography>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <Box sx={{ display: 'flex', 
+                        alignItems: 'center',
+                        maxWidth: 'fit-content',
+                        border: '0px solid',
+                        borderColor: 'grey.300',
+                        borderRadius: 1,
+                        p: 0.5, }}>
+                <LocalShipping />
                 <IconButton 
                   onClick={() => handleQuantityChange(-1)}
                   disabled={quantity <= 1}
+                  size="small"
+                  sx={{
+                    width: 28,
+                    height: 28,
+                    color: 'primary.main',
+                    '&.Mui-disabled': {
+                      color: 'grey.300',
+                    },
+                    '&:hover': {
+                      bgcolor: 'grey.100',
+                    },
+                  }}
                 >
-                  <RemoveCircleOutline />
+                  <RemoveCircleOutline fontSize="small"/>
                 </IconButton>
-                <Typography>{quantity}</Typography>
+                <Typography
+                  sx={{ 
+                    mx: 2,
+                    minWidth: '0px',
+                    textAlign: 'center',
+                    userSelect: 'none',
+                    color: 'text.primary',
+                    fontWeight: 500,
+                  }}
+                >{quantity}</Typography>
                 <IconButton 
                   onClick={() => handleQuantityChange(1)}
                   disabled={quantity >= product.stock}
+                  size="small"
+                  sx={{
+                    width: 28,
+                    height: 28,
+                    color: 'primary.main',
+                    '&.Mui-disabled': {
+                      color: 'grey.300',
+                    },
+                    '&:hover': {
+                      bgcolor: 'grey.100',
+                    },
+                  }}
                 >
                   <AddCircleOutline />
                 </IconButton>
-                <Typography variant="body2" color="text.secondary">
+                <Typography variant="body2" color="text.secondary"
+                  sx={{ 
+                    ml: 2,
+                    userSelect: 'none',
+                  }}
+                >
                   ({product.stock} available)
                 </Typography>
               </Box>
             </Box>
 
             {/* 购买按钮 */}
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 3 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
               <Button
                 variant="contained"
                 size="medium"
@@ -367,8 +458,8 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
               </Button>
               <IconButton
                 sx={{
-                  width: 48,
-                  height: 48,
+                  width: 45,
+                  height: 45,
                   border: '1px solid',
                   borderColor: 'grey.200',
                   color: favorited ? '#1a73e8' : 'grey.600',
@@ -382,8 +473,8 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
               </IconButton>
               <IconButton
                 sx={{
-                  width: 48,
-                  height: 48,
+                  width: 45,
+                  height: 45,
                   border: '1px solid',
                   borderColor: 'grey.200',
                   '&:hover': {
@@ -396,7 +487,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
             </Box>
 
             {/* 服务信息 */}
-            <Stack spacing={2} sx={{ mb: 3 }}>
+            <Stack spacing={2} sx={{ mb: 2 }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                 <LocalShipping sx={{ color: 'text.secondary' }} />
                 <Typography variant="body2" color="text.secondary">
@@ -417,7 +508,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
               </Box>
             </Stack>
 
-            <Divider sx={{ my: 3 }} />
+            <Divider sx={{ my: 1 }} />
 
             {/* 详细信息标签页 */}
             <Box>
@@ -436,7 +527,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
                 ))}
               </Tabs>
               
-              <Box sx={{ py: 3 }}>
+              <Box sx={{ py: 1 }}>
                 {activeTab === 'description' && (
                   <Typography
                     component="div"
